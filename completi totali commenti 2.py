@@ -5,7 +5,7 @@ import time    # Importa la libreria per gestire il tempo (per fare le pause di 
 SOGLIA_BUIO = 400      # Valore di luminosità sotto il quale il sistema considera che sia "buio"
 TIMEOUT_LED = 3        # Numero di secondi per cui il lampione resta acceso dopo un movimento
 
-valore_luce = 600      # Valore iniziale della luce (il programma parte simulando il giorno)
+valore_luce = 400     # Valore iniziale della luce (il programma parte simulando il giorno)
 timer_lampione = 0     # Timer del lampione (all'avvio il lampione è spento)
 cronologia_stati = []  # Lista (memoria) che conterrà le stringhe di testo da mostrare a schermo
 
@@ -14,12 +14,12 @@ print("Legenda: [L = Luce] | [M = Movimento (0/1)] | [❌ = Spento | 💡 = Acce
 
 # ── 2. CICLO IN TEMPO REALE (LOOP INFINITO) ───────────────────────────
 while True:  # Avvia un ciclo infinito: tutto ciò che è dentro verrà eseguito a ripetizione
-    # A) Simulazione Luce: cala regolarmente di 50 punti a ogni secondo (tramonto costante)
-    valore_luce -= 50
+    # A) Simulazione Luce: sceglie a caso se sommare o sottrarre un valore tra quelli in lista
+    valore_luce += random.choice([-50, -20, 20, 50])
     valore_luce = max(0, min(1023, valore_luce))  # Blocca il valore della luce tra 0 e 1023
     
-    # B) Simulazione Movimento: alta probabilità (80%) che passi qualcuno per testare subito l'effetto
-    movimento = 1 if random.random() < 0.80 else 0
+    # B) Simulazione Movimento: genera 1 (passa qualcuno) con il 25% di probabilità, altrimenti 0
+    movimento = 1 if random.random() < 0.25 else 0
     
     # C) Logica di controllo (Come un Arduino)
     buio = valore_luce < SOGLIA_BUIO  # Controlla se la luce attuale è inferiore alla soglia del buio
